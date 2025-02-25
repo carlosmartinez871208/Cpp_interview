@@ -1041,3 +1041,301 @@ The reason for passing const reference is to avoid objects get modified accident
             Singleton& operator=(const Singleton&);  // inaccessible
     };
 
+## **15.-** What is a destructor?
+It is an instance member function that is invoked automatically whenever an object is going to be destroyed.
+
+The destructor is the last function called before an object is destroyed.
+
+    ~ class_name()
+    {
+        /* Some instructions */
+    }
+or
+
+    class_name
+    {
+        public:
+            ~class_name();
+    }
+
+    class_name :: ~class_name()
+    {
+        /* Some instructions */
+    }
+
+The destructor destroys the class objects created by constructor.
+
+Has the same name as tehir class name preceded by ~.
+
+It is not possible to define more than one destructor.
+
+Destructor cannot be overloaded.
+
+it cannot be declared as static or const.
+
+Destructor neither requires any argument, not returns any value.
+
+It is automatically called when an object goes out of the scope.
+
+Objects are destroyed in the reverse of an object creation.
+
+Objects do not take any argument and do not return any value.
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    static int count = 0;
+
+    class Test
+    {
+        public:
+            Test()
+            {
+                count++;
+                std::cout << "Object created: " << count << std::endl;
+            }
+
+            ~Test()
+            {
+                std::cout << "Object destroyed: " << count << std::endl;
+                count--;
+            }
+    };
+
+    int main (int argc, char** argv)
+    {
+        Test t, t1, t2, t3;
+        return EXIT_SUCCESS;
+    }
+
+## **16.-** When a destructor is called?
+It is called automatically when the object goes out of the scope or is deleted.
+
+It is called when function ends.
+
+It is called when program ends.
+
+It is called when a block containing local variables ends.
+
+It is called when a delete operator is called.
+
+## **17.-** When is required to write a user-defined destructor?
+The default constructor works fine unless we have dynamically allocated memoery or pointer in class.
+
+When a class contains a pointer to memory allocated in the class, a destructor should be written to release memoery before the class instances is destroyed to avoid memory leaks.
+
+## **18.-** Can a destructor be virtual?
+Yes, when deleting a derived class object using a pointer of a base class type that has a non-virtual destructor results in undefined behavior.
+
+To correct this situation, the base class should be defined with a virtual destructor.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    static int count = 0;
+
+    class Base
+    {
+        public:
+            Base(){std::cout << "Constructing base!" << std::endl;}
+            virtual ~Base(){std::cout << "Destructing base!" << std::endl;}
+    };
+
+    class Derived : public Base{
+        public:
+            Derived(){std::cout << "Constructing derived!" << std::endl;}
+            ~Derived(){std::cout << "Destructing derived!" << std::endl;}
+    };
+
+    int main (int argc, char** argv)
+    {
+        Derived *d = new Derived();
+        Base *b = d;
+        delete b;
+        return EXIT_SUCCESS;
+    }
+
+As a guideline, any time you have a virtual function in a class, you should immediately add a virtual destructor (even if it does nothing). This way, you ensure against any surprises later.
+
+## **19.-** What is the use of a private destructor?
+Whenever we want to control the destruction of objects of a class, the destructor shall be private.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class parent
+    {
+        ~parent(){std::cout << "Destructor called" << std::endl;}
+        public:
+            parent(){std::cout << "Constructor called" << std::endl;}
+            void destruct() {delete this;}
+    };
+
+    int main (int argc, char** argv)
+    {
+        parent* p;
+        p = new parent;
+        p->destruct;
+        return EXIT_SUCCESS;
+    }
+
+## **20.-** Can a constructor be private?
+Yes, constructor can be defined in private section of class.
+
+The class can be instantiated by a friend class.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class A
+    {
+        private:
+            A(){std::cout << "A constructor!" << std::endl;}
+        friend class B;
+    };
+
+    class B
+    {
+        public:
+            B()
+            {
+                A a1;
+                std::cout << "B constructor!" << std::endl;
+            }
+    }
+
+    int main (int argc, char** argv)
+    {
+        B b1;
+        return EXIT_SUCCESS;
+    }
+
+## **21.-** What is the scope resolution operator?
+**::** is used to access the identifiers such as variable names and function names defined inside some other scope in the current scope.
+
+    scope_name :: identifier
+
+Aplications of Scope Resolution operator:
+
+Accessing Global Variables.
+
+    #include <iostream>
+    using namespace std;
+
+    // Global x
+    int x = 3;
+
+    int main() {
+      
+        // Local x
+        int x = 10;
+  
+        // Printing the global x
+        cout << ::x;
+  
+        return 0;
+    }
+
+Name space resolution.
+
+    #include <iostream>
+    using namespace std;
+
+    // A sample namespace with a variable
+    namespace N {
+        int val = 10;
+    };
+
+    int main() {
+      // Accessing val from namespace N
+        cout << N::val;
+
+        return 0;
+    }
+
+Define Class member function outside class.
+
+    #include <iostream>
+    using namespace std;
+
+    // A sample class
+    class A {
+    public:
+        // Only declaration of member function
+        void fun();
+    };
+
+    // Definition outside class by referring to it
+    // using ::
+    void A::fun() {
+        cout << "fun() called";
+    }
+
+    int main() {
+        A a;
+        a.fun();
+        return 0;
+    }
+
+Access class static members.
+
+    #include<iostream>
+    using namespace std;
+
+    class A {
+    public:
+        static int x; 
+    };
+
+    // In C++, static members must be explicitly defined 
+    // like this
+    int A::x = 1;
+
+    int main() {
+        // Accessing static data member
+        cout << A::x;
+        return 0;
+    }
+
+Refer to base class member in derived class.
+
+    #include <iostream>
+    using namespace std;
+
+    class Base {
+    public:
+        void func() {
+            cout << "Base class func()" << endl;
+        }
+    };
+
+    class Derived : public Base {
+    public:
+        // Overridden function
+        void func() {
+            cout << "Derived class func()" << endl;
+        }
+    };
+
+    int main() {
+        Derived obj;
+        // Calling base class's func() from the object of
+        // derived class
+        obj.Base::func();
+        obj.func();
+        return 0;
+    }
