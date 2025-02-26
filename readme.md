@@ -1339,3 +1339,553 @@ Refer to base class member in derived class.
         obj.func();
         return 0;
     }
+
+## **22.-** What is a friend class?
+This type of class can access private and protected members from other classes in which it is declared as a friend.
+
+It is sometimes useful to allow a particular class to access private and protected members from other classes.
+
+    friend class clas_name; /* Declared in base class. */
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class Base
+    {
+        private:
+            int private_variable;
+    
+        protected:
+            int protected_variable;
+    
+        public:
+            Base()
+            {
+                private_variable = 10;
+                protected_variable = 99;
+            }
+
+            friend class F;
+    };
+
+    class F
+    {
+        public:
+            void display(Base& base)
+            {
+                std::cout << "Private variable value = " << base.private_variable << std::endl;
+                std::cout << "Protected variable value = " << base.protected_variable << std::endl;
+            }
+    };
+
+    int main (int argc, char** argv)
+    {
+        Base base;
+        F f;
+        f.display(base);
+        return EXIT_SUCCESS;
+    }
+
+## **23.-** what is a friend function?
+Like a friend class, a friend function can be granted special access to private and protected members of a class in C++.
+
+They are not the member function of the class but can access and manipulate the private ans protected members of that class for they are declared as friends:
+
+A friend function can be :
+
+### A global function.
+
+    friend return_type function_name (arguments); /* For a global function. */
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class Base
+    {
+        private:
+            int private_variable;
+    
+        protected:
+            int protected_variable;
+    
+        public:
+            Base()
+            {
+                private_variable = 10;
+                protected_variable = 99;
+            }
+
+            friend void friendFunction (Base& obj);
+    };
+
+    void friendFunction(Base& obj);
+
+    int main (int argc, char** argv)
+    {
+        Base obj1;
+        friendFunction(obj1);
+        return EXIT_SUCCESS;
+    }
+
+    void friendFunction(Base& obj)
+    {
+        std::cout << "Private variable = " << obj.private_variable << std::endl;
+        std::cout << "Protected variable = " << obj.protected_variable << std::endl;
+    }
+
+### A member function of another class.
+
+    friend return_type class_name::function_name (arguments); /* For a member function of another class. */
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class A;
+
+    class anotherClass
+    {
+        public:
+            void memberFunction(A& obj);
+    };
+
+    class A
+    {
+        private:
+            int private_variable;
+
+        protected:
+            int protected_variable;
+
+        public:
+            A()
+            {
+                private_variable = 10;
+                protected_variable = 99;
+            }
+
+            friend void anotherClass::memberFunction(A&);
+    };
+
+    void anotherClass::memberFunction(A& obj)
+    {
+        std::cout << "Private variable = " << obj.private_variable << std::endl;
+        std::cout << "Protected variable = " << obj.protected_variable << std::endl;
+    }
+
+    int main (int argc, char** argv)
+    {
+        A obj1;
+        anotherClass obj2;
+        obj2.memberFunction(obj1);
+        return EXIT_SUCCESS;
+    }
+
+## **24.-** Which are some features of Friend Functions?
+
+A friend function is a special function in C++ that in spite of not being a member function of a class has the privilege to access the private and protected data of a class.
+
+A friend function is a non-member function or ordinary function of a class, which is declared as a friend using the keyword “friend” inside the class. By declaring a function as a friend, all the access permissions are given to the function.
+
+The keyword “friend” is placed only in the function declaration of the friend function and not in the function definition or call.
+
+A friend function is called like an ordinary function. It cannot be called using the object name and dot operator. However, it may accept the object as an argument whose value it wants to access.
+
+A friend function can be declared in any section of the class i.e. public or private or protected.
+
+A friend function is able to access members without the need of inheriting the class.
+
+A friend function acts as a bridge between two classes by accessing their private data.
+
+A friend function can be used to increase the versatility of overloaded operators.
+
+A friend function can be declared either in the public or private or protected part of the class.
+
+Friends should be used only for limited purposes. Too many functions or external classes are declared as friends of a class with protected or private data access lessens the value of encapsulation of separate classes in object-oriented programming.
+
+Friendship is not mutual. If class A is a friend of B, then B doesn’t become a friend of A automatically.
+
+## **25.-** Mention dissadvantages of friends funtions?
+
+Friend functions have access to private members of a class from outside the class which violates the law of data hiding.
+
+Friend functions cannot do any run-time polymorphism in their members.
+
+## **26.-** What is a virtual function?
+Also known virtual method is a member function thta is declared within a base class and is redefined (overriden) by a derived class.
+
+When there is a reference to a derived class object using a pointer or a reference to the base class, you can call a virtual function for that object and execute the derived class's version of the method.
+
+### Features of a virtual function.
+Virtual functions ensure thta the correct function is called for an object, regardless of the type of reference (or pointer) used for the function call.
+
+They are mainly used to achieve Runtime polymorphism: this is achieve only through a pointer of the base class type.
+
+Functions are declared with virtual keyword in a base class.
+
+The reoslving of a function call is done at runtime.
+
+### Rules for virtual functions.
+Virtual functions cannot be static.
+
+A virtual function can be a friend function of another class.
+
+Virtual functions should be accessed using a pointer or reference of base class type to achieve runtime polymorphism.
+
+The prototype of virtual functions should be the same in the base as well derived class.
+
+They are always defined in the base class and overriden in a derived class. It is not mandatory for the derived class to override (or re-define the virtual function), in that case, the base class version of the function is used.
+
+A class can have a virtual destructor but it cannot have a virtual constructor.
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class Base
+    {
+        public:
+            virtual void print(){std::cout << "Print base class" << std::endl;}
+            void show(){std::cout << "Show base class" << std::endl;}
+    };
+
+    class Derived : public Base
+    {
+        public:
+            void print(){std::cout << "Print Derived class" << std::endl;}
+            void show(){std::cout << "Show Derived class" << std::endl;}
+    };
+
+    int main (int argc, char** argv)
+    {
+        Base* bptr;
+        Derived d;
+        bptr = &d;
+        /* Virtual function, binded at runtime */
+        bptr->print();
+        /* Non virtual function, binded at compile time */
+        bptr->show();
+        return EXIT_SUCCESS;
+    }
+
+## **27.-** Mention some virtual function limitations?
+**Slower**: The function call takes slightly longer due to the virtual mechanism and makes it more difficult fr the compiler to optimize because it does not know exactly which funtion is going to be called at compile time.
+
+**Difficult to Debug**: In a complex system, virtual functions can make it little more difficult to figure out where a function is being called from.
+
+## **28.-** What is a smart pointer?
+It is a wrapper class over a pointer with an operator like **\*** and **->**. Since the destructor is automatically called when an object goes out of scope, the dynamically allocated memory would automatically be deleted.
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class SmartPtr
+    {
+        int* ptr;
+
+        public:
+            explicit SmartPtr(int* p = nullptr){ptr=p;}
+
+            ~SmartPtr() {delete(ptr);}
+
+            int& operator*() {return *ptr;}
+    };
+
+    int main (int argc, char** argv)
+    {
+        SmartPtr ptr(new int());
+        *ptr = 20;
+        std::cout << *ptr << std::endl;
+        return EXIT_SUCCESS;
+    }
+
+## **29.-** Mention difference between pointers and smart pointers.
+
+| **Pointer**                                                    | **Smart pointer**                                    |
+|----------------------------------------------------------------|------------------------------------------------------|
+| A pointer is a variable that mantains a memory address.        | It's pointer-wrapping stack-allocated object.        |
+| A pointer is a variable that points to something in memory.    | Smart pointers, are classed that wrap a pointer or scoped pointers|
+| It is not destroyed in any form when it goes out of its scope. | It destroys it self whe it goes out of its scope.    |
+| Pointers are not so efficient as they don't support any other feature | Smart pointers are more efficients as they have an additional feature of memory management|
+| They are very labor-centic/manual.                             | They are automatic/pre-programmed in nature.        |
+
+## **30.-** Which are the smart pointer types?
+### auto_ptr: 
+C++11 deprecated, similar to unique but less security.
+
+### unique_ptr: 
+Stores one pointer. We can assign different object by removing the current object from the pointer.
+
+Example:
+
+    #include <iostream>
+    // Dynamic Memory management library
+    #include <memory>
+
+    class Rectangle {
+        int length;
+        int breadth;
+
+    public:
+        Rectangle(int l, int b)
+        {
+            length = l;
+            breadth = b;
+        }
+
+        int area() { return length * breadth; }
+    };
+
+    int main()
+    {
+    // --\/ Smart Pointer
+        unique_ptr<Rectangle> P1(new Rectangle(10, 5));
+        cout << P1->area() << endl; // This'll print 50
+
+        // unique_ptr<Rectangle> P2(P1);
+        unique_ptr<Rectangle> P2;
+        P2 = move(P1);
+
+        // This'll print 50
+        cout << P2->area() << endl;
+        return 0;
+    }
+
+### Shared pointer.
+More than one pointer can point to this one object at a time and it will maintain a reference counter using the use_count() method.
+
+Example:
+
+    #include <iostream>
+    // Dynamic Memory management library
+    #include <memory>
+
+    class Rectangle {
+        int length;
+        int breadth;
+
+    public:
+        Rectangle(int l, int b)
+        {
+            length = l;
+            breadth = b;
+        }
+
+        int area() { return length * breadth; }
+    };
+
+    int main()
+    {
+        //---\/ Smart Pointer
+        shared_ptr<Rectangle> P1(new Rectangle(10, 5));
+        // This'll print 50
+        cout << P1->area() << endl;
+
+        shared_ptr<Rectangle> P2;
+        P2 = P1;
+
+        // This'll print 50
+        cout << P2->area() << endl;
+
+        // This'll now not give an error,
+        cout << P1->area() << endl;
+
+        // This'll also print 50 now
+        // This'll print 2 as Reference Counter is 2
+        cout << P1.use_count() << endl;
+        return 0;
+    }
+
+### weak_ptr
+This holds a non-owning reference to an object. It is similar ti shared_pointer except it will not mantain a reference counter.
+
+In this case, a pointer will not have a stronghold on the project. The reason is to avoid the circular dependency created by two or more object pointing to each other using shared_ptr.
+
+    #include <iostream>
+    // Dynamic Memory management library
+    #include <memory>
+
+    class Rectangle {
+        int length;
+        int breadth;
+
+    public:
+        Rectangle(int l, int b)
+        {
+            length = l;
+            breadth = b;
+        }
+
+        int area() { return length * breadth; }
+    };
+
+    int main()
+    {
+        //---\/ Smart Pointer
+        shared_ptr<Rectangle> P1(new Rectangle(10, 5));
+  
+        // create weak ptr
+        weak_ptr<Rectangle> P2 (P1);
+  
+        // This'll print 50
+        cout << P1->area() << endl;
+
+        // This'll print 1 as Reference Counter is 1
+        cout << P1.use_count() << endl;
+        return 0;
+    }
+
+## **31.-** What is a template?
+It is a tool and the idea is to pass the data type as a parameter so that we don't need to write the same code for differente data types.
+
+Templates are expanded at compiler time (like macros), the difference with macros is that the compiler does type-checking before template expansion.
+
+The idea is that source code contains only function/class, but compiled code may contain multiples copies of the same function/class.
+
+### Function templates.
+The goal is to write a function that can be used for different dta types.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    template <typename T> T myMax(T x, T y)
+    {
+        return (x>y)?x:y;
+    }
+
+    int main (int argc, char** argv)
+    {
+        std::cout << myMax<int>(3,7) << std::endl;
+        std::cout << myMax<double>(3.5,7.6) << std::endl;
+        std::cout << myMax<char>('g','e') << std::endl;
+        return EXIT_SUCCESS;
+    }
+
+### Class templates.
+Defines class that is independent of the data type.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    template <typename T> class Array
+    {
+        private:
+            T* ptr;
+            int size;
+
+        public:
+            Array(T arr[], int s);
+            void print();
+    };
+
+    template <typename T> Array<T> :: Array(T arr[], int s)
+    {
+        ptr = new T(s);
+        size = s;
+        for(int i=0; i<size; i++)
+        {
+            ptr[i] = arr[i];
+        }
+    }
+
+    template <typename T> void Array<T> :: print()
+    {
+        for(int i=0; i<size; i++)
+        {
+            std::cout << *(ptr+i) << std::endl; 
+        }
+    }
+
+    int main (int argc, char** argv)
+    {
+        int arr[5] = {1,2,3,4,5};
+        Array<int> a(arr,5);
+        a.print();
+        return EXIT_SUCCESS;
+    }
+
+## **32.-** What is an exception?
+It is an unexpected problem that arises during the execution of a program, the program terminates suddendly with some errors/issues.
+
+Exception occurs in runtime.
+
+There are two types of exception:
+
+**synchronous**: Exceptions that happen whe something goes wrong because of a mistake in the input data or when the program is not equipped to handle tue current type of data it is working with, such as dividing a number by zero.
+
+**Asynchronous**: Exception that are beyond the program's control, such as disc failure, keyboard interrupts, etc.
+
+### Syntax.
+
+    try
+    {
+        /* Code that might throw an exception */
+        throw SomeExceptionType("Error message");
+    }
+    catch (ExceptionName e1)
+    {
+        /* catch block: catches the exception that is thrown from try block */
+    }
+
+### Example.
+
+    #include <iostream>
+    #include <stdexcept>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    int main (int argc, char** argv)
+    {
+        try
+        {
+            int numerator=10;
+            int denominator=0;
+            int res;
+            if(0 == denominator)
+            {
+                throw std::runtime_error("Division by zero not allowed");
+            }
+            else
+            {
+                res  = numerator/denominator;
+                std::cout << "Result: " << res <<std::endl;
+            }
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << "Exception: " << e.what() << std::endl;
+        }
+        return EXIT_SUCCESS;
+    }
+
