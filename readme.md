@@ -1889,3 +1889,463 @@ There are two types of exception:
         return EXIT_SUCCESS;
     }
 
+## **33.-** What is a namespace?
+**namespace** provide the space where identifiers (variables, method, classes) are defined or declared.
+
+Using namespace you can define the space or context in which identifiers are defined.
+
+A namespace defines a scope.
+
+So, if a function called xyz() and there is another library available which has the same function xyz(). Now the compiler has no way of knowing which version of 
+xyz() function has to be referred.
+
+A namespace is designed to overcome this difficulty and is used as additional information to differentiate similar functions, classes, variables, etc, with the 
+same name available in different libraries.
+
+The best example of namespace scope is the C++ standard library (std) where all the classes, methods and templates are declared.
+
+### Definition of a namespace.
+
+    namespace namespace_name
+    {
+        /* Code declarations */
+        method (void add();) 
+        classes (class student{};)
+    } /* No semicolon */
+
+### Using directive.
+To avoid prepending namespaces with the **using** namespace directive.
+This directive tells the compiler that the subsequent code is making use of names in the specified namespace.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    namespace first_space
+    {
+        void func()
+        {
+            std::cout << "Inside first space" << std::endl;
+        }
+    }
+
+    namespace second_space
+    {
+        void func()
+        {
+            std::cout << "Inside second space" << std::endl;
+        }
+    }
+
+    using namespace first_space;
+
+    int main (int argc, char** argv)
+    {
+        func();
+        return EXIT_SUCCESS;
+    }
+
+### Nested Namespaces.
+Namespaces can be nested where you can define one namespaces inside another spaces as follows:
+
+    namespace namespace_name1
+    {
+        /* Code declaration */
+        namespaces namespace_name2
+        {
+            /* Code declaration */
+        }
+    }
+
+Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    namespace first_space
+    {
+        void func()
+        {
+            std::cout << "Inside first space" << std::endl;
+        }
+        namespace second_space
+        {
+            void func()
+            {
+                std::cout << "Inside second space" << std::endl;
+            }
+        }
+    }
+
+    using namespace first_space::second_space;
+
+    int main (int argc, char** argv)
+    {
+        func();
+        return EXIT_SUCCESS;
+    }
+
+### Classes and namespaces.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    namespace myspace
+    {
+        class myclass
+        {
+            public:
+                void display()
+                {
+                    std::cout << "Displaying: myspace::myclass::display()" << std::endl;
+                }
+        };
+    }
+
+    /*****************************************************************************************************/
+    namespace myspace2
+    {
+        class myclass;
+    }
+
+    class myspace2::myclass
+    {
+        public:
+            void display() {std::cout << "Displaying: myspace2::myclass::display()" << std::endl;}
+    };
+    /*******************************************************************************************************/
+    namespace myspace3
+    {
+        void display();
+        class myclass
+        {
+            public:
+                void display();
+        };
+    }
+
+    void myspace3::myclass::display()
+    {
+        std::cout << "Displaying: myspace3::myclass::display()" << std::endl;
+    }
+
+    void myspace3::display() {std::cout << "Displaying: myspace3::display()" << std::endl;;}
+
+    int main (int argc, char** argv)
+    {
+        myspace::myclass obj;
+        obj.display();
+        myspace2::myclass obj2;
+        obj2.display();
+        myspace3::myclass obj3;
+        myspace3::display();
+        obj3.display();
+        return EXIT_SUCCESS;
+    }
+
+## **34.-** What is a struct?
+It is a user defined data type and it is used to group items of possibly different types into a single type.
+
+### Syntax:
+
+    struct structureName
+    {
+        member1;
+        member2;
+        .
+        .
+        .
+        memberN;
+    }
+
+Structures contain two types of members:
+
+**Data member**: These are normal C++ variables.
+
+**Member functions**: These are members are normal C++ functions. Along with variables, we can also include functions inside a structure declaration.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    struct Point
+    {
+        int x, y;
+    };  
+
+    int main (int argc, char** argv)
+    {
+        struct Point arr[10];
+        arr[0].x = 10;
+        arr[0].y = 25;
+        std::cout << arr[0].x << " " << arr[0].y << std::endl;
+        return EXIT_SUCCESS;
+    }
+
+## **35.-.-** What is a pointer?
+A pointer is a symbolic representation of an address. It enable a program to simulate **call-by-reference** as well as to create and manipulate dynamic structures.
+
+The address of the variable which it is assigned to the pointer variable that points to the same data type.
+
+### Use of a pointer.
+Define a pointer variable
+
+Assign the address of a variable to a pointer using the unary operator **&** which returns the address of that variable.
+
+Accessing the value stored in the address using unary operator **\*** which return the value of the variable located at the address specified by its operand.
+
+The reason we associate data typw with a pointer is **that it knows how many bytes the data is stored in**.
+
+When a pointer is incremented, the pointer is increased according the size of the data type which it points.
+
+### Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    void pointers ()
+    {
+        int var = 20;
+        int* ptr;
+        ptr = &var;
+        std::cout << "Value at var: " << var << std::endl;
+        std::cout << "Address of var stored at ptr: " << ptr << std::endl;
+        std::cout << "Address of ptr (pointer variable address): " << &ptr << std::endl;
+        std::cout << "Value at *prt (dereference): " << *ptr << std::endl;
+    }
+
+    int main (int argc, char** argv)
+    {
+        pointers();
+        return EXIT_SUCCESS;
+    }
+
+## **36.-** Mention the ways to pass arguments to a function?
+Call by value.
+Call by reference with a pointer argument.
+Call by reference with a reference argumente.
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    /* Pass by value */
+    int pass_by_value (int n)
+    {
+        std::cout << "Address of n(n1) in pass_by_value function: " << &n << std::endl;
+        n *= n;
+        return n;
+    }
+
+    /* Pass by reference with pointer arguments */
+    void pass_by_reference_ptrArg (int* n)
+    {
+        std::cout << "Address of n(n2) in pass_by_reference_ptrArg function: " << n << std::endl;
+        *n *= *n;
+    }
+
+    /* Pass by reference with reference arguments */
+    void pass_by_reference_refArg (int& n)
+    {
+        std::cout << "Address of n(n3) in pass_by_reference_refArg function: " << &n << std::endl;
+        n *= n;
+    }
+
+    int main (int argc, char** argv)
+    {
+        /* Call by value */
+        int n1 = 8;
+        std::cout << "Address of n1 in main(): " << &n1 << std::endl;
+        std::cout << "Value of n1 at pass_by_value: " << pass_by_value(n1) << std::endl;
+        std::cout << "No change in n1: " << n1 << std::endl;
+
+        /* Call by reference with pointer arguments */
+        int n2 = 8;
+        std::cout << "Address of n2 in main(): " << &n2 << std::endl;
+        pass_by_reference_ptrArg(&n2);
+        std::cout << "Value of n2 at pass_by_reference_ptrArg: " << n2 << std::endl;
+        std::cout << "Change reflected in n2: " << n2 << std::endl;
+
+        /* Call by reference with reference arguments */
+        int n3 = 8;
+        std::cout << "Address of n3 in main(): " << &n3 << std::endl;
+        pass_by_reference_refArg(n3);
+        std::cout << "Value of n3 at pass_by_reference_ptrArg: " << n3 << std::endl;
+        std::cout << "Change reflected in n3: " << n3 << std::endl;
+        return EXIT_SUCCESS;
+    }
+
+Output:
+
+    Address of n1 in main(): 0xffffeb8d3a5c
+    Value of n1 at pass_by_value: Address of n(n1) in pass_by_value function: 0xffffeb8d3a3c
+    64
+    No change in n1: 8
+    Address of n2 in main(): 0xffffeb8d3a60
+    Address of n(n2) in pass_by_reference_ptrArg function: 0xffffeb8d3a60
+    Value of n2 at pass_by_reference_ptrArg: 64
+    Change reflected in n2: 64
+    Address of n3 in main(): 0xffffeb8d3a64
+    Address of n(n3) in pass_by_reference_refArg function: 0xffffeb8d3a64
+    Value of n3 at pass_by_reference_ptrArg: 64
+    Change reflected in n3: 64
+
+## **37.-** Explain dynamic memory.
+Refers to perfomring memory allocation by a programmer,
+
+Dynamically allocated memory is allocated on Heap, and non-static and local variables get memoery allocated on Stack.
+
+For normal variables like "int a", "char str[10]", memoery is automatically allocated and deallocated. For dynamically allocated memory like "int *p = new int [10]", it is the programmer responsability to deallocate memoery when no longer needed. If programmer does not deallocate memory, it causes a memory leak (memory is not deallocated until program ends).
+
+### new operator.
+It denotes a request for memory allocation on the free store if enought memory is available.
+
+**new** operator initializes the memory and returns the address of the newly allocated and initialized memoery to the pointer variable:
+
+    pointer-variable = new data-type;
+
+Initialize:
+
+    pointer-variable = new data-type(value);
+
+### delete operator.
+It is use to deallocate dynamic memory.
+
+    delete pointer-variable;
+
+### Example:
+
+    #include <iostream>
+
+    #ifndef EXIT_SUCCESS
+     #define EXITS_SUCESS 0u
+    #endif
+
+    class Box
+    {
+        public:
+            Box()
+            {
+                std::cout << "Constructor called!" <<std::endl;
+            }
+
+            ~Box()
+            {
+                std::cout << "Destructor called!" <<std::endl;
+            }
+    };
+
+    int main (int argc, char** argv)
+    {
+        double* pvalue = nullptr;
+        pvalue = new double;
+        *pvalue = 3.14259;
+        std::cout << "Value of pvalue: " << *pvalue << std::endl;
+        Box* myBoxArray = new Box[4];
+        delete[] myBoxArray;
+        delete pvalue;
+        return EXIT_SUCCESS;
+    }
+
+## **38.-** What is lambda expresion?
+A lambda is an unnamed function that is useful for short snippets of code that are impossible to reuse and are not worth naming.
+
+[]{} /* Lambda with no parameters that does nothing */
+
+[] is the capture list and {} the function.
+
+The full syntax for lambda-expression, including attributes, noexcept/throw-specifications, requires-clauses, etc. is more complex.
+
+The capture list defines what from the outside of the lambda should be available inside the function body and how
+
+1.- A value: [x]
+2.- A reference [&x]
+3.- Any variable currently in scope by reference [&]
+4.- Same as 3, but by value [=]
+5.- Capturing **this** and making member functions callable within the lambda [this]
+6.- Combine any of the above in a comma separated list [x, &y]
+
+An element of the capture can now be initialized with **=**, which is called **init-capture**. This allows renaming of variables and to capture by moving.
+
+    int x = 4;
+    auto y = [&r = x, x = x+1]()->int {
+                r+=2;
+                return x+2;
+             }
+
+### Example.
+
+    #include <algorithm>
+    #include <functional>
+    #include <iostream>
+    #include <vector>
+ 
+    int main()
+    {
+        std::vector<int> c{1, 2, 3, 4, 5, 6, 7};
+        int x = 5;
+        c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end());
+ 
+        std::cout << "c: ";
+        std::for_each(c.begin(), c.end(), [](int i) { std::cout << i << ' '; });
+        std::cout << '\n';
+ 
+        // the type of a closure cannot be named, but can be inferred with auto
+        // since C++14, lambda could own default arguments
+        auto func1 = [](int i = 6) { return i + 4; };
+        std::cout << "func1: " << func1() << '\n';
+ 
+        // like all callable objects, closures can be captured in std::function
+        // (this may incur unnecessary overhead)
+        std::function<int(int)> func2 = [](int i) { return i + 4; };
+        std::cout << "func2: " << func2(6) << '\n';
+ 
+        constexpr int fib_max {8};
+        std::cout << "Emulate `recursive lambda` calls:\nFibonacci numbers: ";
+        auto nth_fibonacci = [](int n)
+        {
+            std::function<int(int, int, int)> fib = [&](int n, int a, int b)
+            {
+                return n ? fib(n - 1, a + b, a) : b;
+            };
+            return fib(n, 0, 1);
+        };
+ 
+        for (int i{1}; i <= fib_max; ++i)
+            std::cout << nth_fibonacci(i) << (i < fib_max ? ", " : "\n");
+ 
+        std::cout << "Alternative approach to lambda recursion:\nFibonacci numbers: ";
+        auto nth_fibonacci2 = [](auto self, int n, int a = 0, int b = 1) -> int
+        {
+            return n ? self(self, n - 1, a + b, a) : b;
+        };
+ 
+        for (int i{1}; i <= fib_max; ++i)
+            std::cout << nth_fibonacci2(nth_fibonacci2, i) << (i < fib_max ? ", " : "\n");
+ 
+    #ifdef __cpp_explicit_this_parameter
+        std::cout << "C++23 approach to lambda recursion:\n";
+        auto nth_fibonacci3 = [](this auto self, int n, int a = 0, int b = 1) -> int
+        {
+            return n ? self(n - 1, a + b, a) : b;
+        };
+ 
+        for (int i{1}; i <= fib_max; ++i)
+            std::cout << nth_fibonacci3(i) << (i < fib_max ? ", " : "\n");
+    #endif
+    }
